@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Titiksha's Reading Room</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+<script>
+  (function(){var t=null;try{t=JSON.parse(localStorage.getItem('tb-theme'))}catch(e){}
+  document.documentElement.dataset.theme=t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=IM+Fell+English:ital@0;1&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wall:#E3E6D3; --wall-2:#D5DAC3; --panel:rgba(46,36,24,.045);
+  --paper:#F8F4E8; --card:#FBF8EF; --ink:#2E2418; --muted:#5E5847;
+  --walnut:#6B4226; --walnut-dk:#3E2512; --plank-hi:#9A643A;
+  --green:#2F5D46; --green-ink:#F8F4E8; --brass:#A87A2E;
+  --line:rgba(46,36,24,.16); --glow:rgba(255,252,236,.9);
+  --shadow:0 18px 40px -22px rgba(40,30,15,.55);
+  --display:'IM Fell English', 'Iowan Old Style', Georgia, serif;
+  --ui:'Karla', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --hand:'Caveat', 'Bradley Hand', cursive;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --wall:#0F1914; --wall-2:#0A120E; --panel:rgba(255,255,255,.022);
+    --paper:#18231D; --card:#1C2922; --ink:#ECE2CB; --muted:#A5AA95;
+    --walnut:#4B2E18; --walnut-dk:#1F130A; --plank-hi:#6E4524;
+    --green:#8CC2A0; --green-ink:#0F1914; --brass:#E2B062;
+    --line:rgba(236,226,203,.13); --glow:rgba(242,178,84,.17);
+    --shadow:0 18px 40px -20px rgba(0,0,0,.85);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --wall:#0F1914; --wall-2:#0A120E; --panel:rgba(255,255,255,.022);
+  --paper:#18231D; --card:#1C2922; --ink:#ECE2CB; --muted:#A5AA95;
+  --walnut:#4B2E18; --walnut-dk:#1F130A; --plank-hi:#6E4524;
+  --green:#8CC2A0; --green-ink:#0F1914; --brass:#E2B062;
+  --line:rgba(236,226,203,.13); --glow:rgba(242,178,84,.17);
+  --shadow:0 18px 40px -20px rgba(0,0,0,.85);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:var(--ui); color:var(--ink); min-height:100vh; line-height:1.5;
+  background:
+    radial-gradient(1100px 640px at 10% -10%, var(--glow), transparent 62%),
+    repeating-linear-gradient(90deg, transparent 0 139px, var(--panel) 139px 141px),
+    var(--wall);
+  background-attachment:fixed;
+  transition:background-color .4s ease, color .4s ease;
+}
+[hidden]{display:none !important}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2.5px solid var(--brass);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;border-radius:999px;
+  padding:10px 18px;font-weight:700;background:var(--green);color:var(--green-ink);
+  box-shadow:0 1px 0 rgba(255,255,255,.25) inset, 0 6px 16px -8px rgba(0,0,0,.5);transition:transform .15s ease, filter .15s}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.6;cursor:progress}
+.ghost{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--line);
+  border-radius:999px;padding:8px 14px;cursor:pointer;color:var(--ink)}
+.ghost:hover{background:var(--line)}
+.icon{width:40px;height:40px;padding:0;justify-content:center;border-radius:50%}
+.btn svg,.ghost svg{width:18px;height:18px;flex:none}
+
+.lamp-btn{background:none;border:0;padding:2px;cursor:pointer;width:46px;height:46px;flex:none;border-radius:10px}
+.lamp-btn svg{width:100%;height:100%;display:block;overflow:visible}
+.lamp .cone{opacity:0;transition:opacity .5s ease}
+.lamp .bulb{fill:#cdbf98;transition:fill .4s}
+.lamp .chain{transition:transform .25s ease;transform-origin:35px 20px}
+.lamp-btn:active .chain{transform:translateY(3px)}
+:root[data-theme="dark"] .lamp .cone{opacity:.5}
+:root[data-theme="dark"] .lamp .bulb{fill:#FFE3A3}
+
+/* ---------- Sign in ---------- */
+#login{min-height:100vh;display:grid;place-items:center;padding:32px 18px}
+.login-wrap{width:min(460px,100%)}
+.login-top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.login-top h1{font-family:var(--display);font-weight:400;font-size:clamp(2rem,6vw,2.7rem);line-height:1.05;margin:0}
+.login-sub{color:var(--muted);margin:0 0 30px 58px}
+.card{
+  position:relative;color:#3A2A1A;border-radius:3px;padding:20px 24px 28px;
+  background:
+    repeating-linear-gradient(transparent 0 35px, rgba(122,92,52,.28) 35px 36px) 0 58px/100% calc(100% - 58px) no-repeat,
+    #F1E3BE;
+  box-shadow:0 1px 0 #fff8 inset, 0 26px 50px -24px rgba(0,0,0,.6);
+  transform:rotate(-1.2deg);
+}
+.card::before{content:"";position:absolute;top:-10px;left:50%;width:70px;height:20px;margin-left:-35px;
+  background:rgba(255,255,255,.45);border:1px solid rgba(0,0,0,.05);transform:rotate(2deg)}
+.card-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:3px double #A8322A;padding-bottom:8px;margin-bottom:10px}
+.card-head b{font-family:var(--display);font-weight:400;font-size:1.35rem}
+.card-head span{color:#A8322A;font-weight:700;font-size:.9rem}
+.card-row{display:grid;grid-template-columns:92px 1fr;align-items:end;gap:10px;min-height:36px}
+.card-row label,.card-row .lbl{font-size:.85rem;color:#6B5536;padding-bottom:6px}
+.hand{font-family:var(--hand);font-size:1.9rem;color:#1F3C88;line-height:1;overflow-wrap:anywhere}
+.hand.sm{font-size:1.45rem}
+.card input{width:100%;background:transparent;border:0;border-bottom:1.5px dashed #8A6A40;border-radius:0;
+  font-family:var(--hand);font-size:1.65rem;color:#1F3C88;padding:2px 2px 0;outline:none}
+.card input::placeholder{color:#1F3C8855}
+.card input:focus{border-bottom-style:solid;border-bottom-color:#1F3C88}
+#code{letter-spacing:.18em}
+.hint{font-size:.9rem;color:#5B4A30;margin:16px 0 0;max-width:36ch}
+.err{color:#A8322A;font-weight:700;font-size:.9rem;margin:8px 0 0;min-height:1.2em}
+.card-actions{display:flex;align-items:center;flex-wrap:wrap;gap:6px 16px;margin-top:14px}
+.stamp-btn{background:transparent;border:2.5px solid #2F5D46;color:#2F5D46;border-radius:7px;
+  padding:8px 22px;font-weight:700;font-size:1.05rem;transform:rotate(-2.5deg);cursor:pointer;transition:background .15s}
+.stamp-btn:hover{background:rgba(47,93,70,.1)}
+.stamp-btn:disabled{opacity:.55;cursor:progress}
+.linkish{background:none;border:0;padding:4px 0;color:#5B4A30;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:.9rem}
+.stamp{position:absolute;right:20px;bottom:26px;border:3.5px solid #A8322A;color:#A8322A;
+  font-family:var(--display);font-size:1.7rem;padding:2px 14px;border-radius:8px;opacity:0;pointer-events:none;transform:rotate(-14deg)}
+.stamp.on{opacity:.88;animation:stamp .38s cubic-bezier(.2,.9,.3,1.3) both}
+@keyframes stamp{from{opacity:0;transform:rotate(-14deg) scale(2.2)}to{opacity:.88;transform:rotate(-14deg) scale(1)}}
+.login-foot{color:var(--muted);font-size:.85rem;margin:30px 0 0 6px}
+
+/* ---------- Library ---------- */
+.topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:18px;padding-bottom:6px}
+.wordmark{font-family:var(--display);font-size:1.45rem;margin:0;margin-right:auto;white-space:nowrap}
+.search{position:relative}
+.search input{width:min(260px,52vw);padding:10px 14px 10px 38px;border-radius:999px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink);font:inherit}
+.search svg{position:absolute;left:12px;top:50%;width:17px;height:17px;transform:translateY(-50%);color:var(--muted)}
+@media (max-width:640px){
+  .search{order:5;flex:1 1 100%}
+  .search input{width:100%}
+  .signout-txt{display:none}
+}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:28px 40px;align-items:end;margin:34px 0 44px}
+@media (max-width:820px){.hero{grid-template-columns:1fr}}
+.today{color:var(--muted);margin:0 0 6px}
+.greet{font-family:var(--display);font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);line-height:1;margin:0 0 14px;letter-spacing:-.01em}
+.statline{margin:0;color:var(--muted);font-size:1.05rem;max-width:46ch}
+.sync{display:inline-flex;align-items:center;gap:8px;margin:14px 0 0;font-size:.88rem;color:var(--muted)}
+.sync i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px color-mix(in srgb, var(--green) 25%, transparent)}
+.sync.off i{background:var(--brass);box-shadow:none}
+.sync.busy i{animation:pulse 1s ease-in-out infinite alternate}
+@keyframes pulse{to{opacity:.25}}
+
+.continue{display:flex;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.cover{width:92px;flex:none;aspect-ratio:2/3;border-radius:2px 5px 5px 2px;object-fit:cover;background:var(--c,#6B4226);
+  box-shadow:inset 4px 0 0 rgba(0,0,0,.22), 0 8px 18px -8px rgba(0,0,0,.6);
+  display:flex;align-items:center;justify-content:center;text-align:center;color:#F3E6C4;font-family:var(--display);
+  font-size:.85rem;line-height:1.15;padding:8px;overflow:hidden}
+.continue-body{min-width:0;display:flex;flex-direction:column;gap:4px}
+.continue-body small{color:var(--muted)}
+.continue-body h3{font-family:var(--display);font-weight:400;font-size:1.4rem;line-height:1.15;margin:0;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.continue-body .by{color:var(--muted);font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin:8px 0 2px}
+.bar i{display:block;height:100%;background:var(--brass);border-radius:6px}
+.continue .btn{align-self:flex-start;margin-top:8px;padding:8px 16px}
+
+.shelf{margin:0 0 42px}
+.shelf-head{display:flex;align-items:center;gap:14px;margin:0 0 12px}
+.plate{font-family:var(--display);font-weight:400;font-size:1.15rem;color:#3A2612;padding:3px 16px 4px;border-radius:3px;margin:0;
+  background:linear-gradient(180deg,#E6C27A,#B88A3B 60%,#9C7130);box-shadow:0 1px 0 #fff6 inset, 0 2px 4px rgba(0,0,0,.35)}
+.plate::before,.plate::after{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:#7A5520;
+  box-shadow:0 1px 0 #f5dca0;vertical-align:middle;margin:0 10px 2px 0}
+.plate::after{margin:0 0 2px 10px}
+.shelf-count{color:var(--muted);font-size:.92rem}
+.case{position:relative;border-radius:8px 8px 4px 4px;padding:0 14px;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.35), transparent 6%, transparent 94%, rgba(0,0,0,.35)),
+    linear-gradient(180deg, var(--walnut-dk), var(--walnut));
+  box-shadow:inset 0 14px 26px -6px rgba(0,0,0,.55), 0 0 0 6px var(--walnut-dk), var(--shadow)}
+.row{display:flex;align-items:flex-end;gap:3px;min-height:236px;padding:22px 8px 0;overflow-x:auto;overflow-y:hidden;
+  scrollbar-width:thin;scrollbar-color:var(--brass) transparent}
+.plank{height:18px;margin:0 -14px;border-radius:0 0 4px 4px;
+  background:linear-gradient(180deg,var(--plank-hi),var(--walnut) 45%,var(--walnut-dk));box-shadow:0 10px 16px -8px rgba(0,0,0,.6)}
+.shelf-empty{align-self:center;margin:auto;color:#E9D9B5;opacity:.75;font-family:var(--display);font-style:italic;font-size:1.1rem;text-align:center;padding:0 12px}
+
+.spine{
+  --c:#7B2D26; position:relative;flex:0 0 auto;border:0;cursor:pointer;color:#F3E6C4;padding:16px 0 12px;
+  border-radius:3px 3px 1px 1px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:8px;
+  background:linear-gradient(90deg, rgba(0,0,0,.38), rgba(255,255,255,.14) 16%, rgba(255,255,255,0) 38%, rgba(0,0,0,.28)), var(--c);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.25), 3px 0 4px -1px rgba(0,0,0,.45);
+  transition:transform .22s cubic-bezier(.3,.7,.4,1);transform-origin:bottom center}
+.spine::before,.spine::after{content:"";position:absolute;left:3px;right:3px;height:5px;
+  border-top:1.5px solid rgba(232,198,120,.85);border-bottom:1.5px solid rgba(232,198,120,.85)}
+.spine::before{top:7px}
+.spine::after{bottom:24px}
+.spine:hover,.spine:focus-visible{transform:translateY(-12px)}
+.spine .t{writing-mode:vertical-rl;font-family:var(--display);font-size:15px;line-height:1.1;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;max-height:calc(100% - 40px);text-shadow:0 1px 0 rgba(0,0,0,.4)}
+.spine[data-v="1"] .t{background:#EFE2C2;color:#3A2612;text-shadow:none;padding:8px 3px;border-radius:2px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.spine[data-v="2"] .t{font-style:italic;color:#F0CF86}
+.spine .f{font-size:10px;font-weight:700;opacity:.78;margin-bottom:2px}
+.spine .p{position:absolute;left:5px;right:5px;bottom:5px;height:3px;background:rgba(255,255,255,.18);border-radius:2px;overflow:hidden}
+.spine .p i{display:block;height:100%;background:#F0CF86}
+.ribbon{position:absolute;top:-12px;right:9px;width:9px;height:30px;background:#B5372B;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%)}
+
+.empty-drop{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:34px 20px;margin:0 0 40px;
+  border:2px dashed var(--line);border-radius:14px;color:var(--muted)}
+.empty-drop h3{font-family:var(--display);font-weight:400;font-size:1.6rem;margin:0;color:var(--ink)}
+.empty-drop p{margin:0;max-width:44ch}
+.foot{color:var(--muted);font-size:.88rem;padding:10px 0 40px;border-top:1px solid var(--line);margin-top:10px}
+
+#dropOverlay{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:rgba(20,14,8,.55);backdrop-filter:blur(3px);pointer-events:none}
+#dropOverlay div{background:var(--card);border:3px dashed var(--brass);border-radius:18px;padding:40px 48px;text-align:center;font-family:var(--display);font-size:1.8rem}
+
+/* ---------- Reader ---------- */
+#reader{position:fixed;inset:0;z-index:30;display:grid;grid-template-rows:auto 1fr auto;background:var(--wall-2)}
+.rbar,.rfoot{display:flex;align-items:center;gap:8px;padding:10px clamp(10px,2vw,18px);background:var(--paper);
+  border-bottom:1px solid var(--line);padding-top:max(10px, env(safe-area-inset-top))}
+.rfoot{border-bottom:0;border-top:1px solid var(--line);padding-top:10px;padding-bottom:max(10px, env(safe-area-inset-bottom))}
+.rtitle{flex:1;min-width:0;text-align:center}
+.rtitle b{display:block;font-family:var(--display);font-weight:400;font-size:1.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rtitle span{display:block;color:var(--muted);font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rtools{display:flex;gap:6px;align-items:center}
+.ghost[aria-pressed="true"]{background:var(--green);color:var(--green-ink);border-color:transparent}
+@media (max-width:600px){ .back-txt{display:none} .rbar .lamp-btn{width:40px;height:40px} .rtools{gap:3px} .rtools .icon{width:36px;height:36px} }
+#stage{position:relative;overflow:hidden}
+.pdf-scroll{position:absolute;inset:0;overflow:auto;display:flex;padding:16px}
+.pdf-scroll canvas{margin:auto;background:#fff;box-shadow:0 16px 40px -14px rgba(0,0,0,.55);border-radius:2px;transition:filter .3s}
+#stage.night .pdf-scroll canvas{filter:invert(.88) hue-rotate(180deg) sepia(.12)}
+.epub-host{position:absolute;inset:14px;max-width:1120px;margin:0 auto;background:var(--paper);border-radius:4px;
+  box-shadow:0 16px 40px -18px rgba(0,0,0,.55);padding:18px 10px}
+.tapzone{position:absolute;top:0;bottom:0;width:12%;z-index:3;background:transparent;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tapzone.l{left:0}.tapzone.r{right:0}
+.txt-scroll{position:absolute;inset:0;overflow:auto;padding:16px}
+.txt-page{max-width:68ch;margin:0 auto;background:var(--paper);padding:clamp(24px,5vw,56px);border-radius:4px;
+  box-shadow:0 16px 40px -18px rgba(0,0,0,.55);font-family:Georgia,'Iowan Old Style',serif;line-height:1.75}
+.txt-page p{margin:0 0 1em}
+.loading{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-style:italic;font-size:1.3rem;color:var(--muted);padding:20px;text-align:center}
+.rfoot input[type=range]{flex:1;accent-color:var(--brass);min-width:60px}
+.plabel{min-width:9.5em;text-align:center;font-size:.9rem;color:var(--muted);font-variant-numeric:tabular-nums}
+@media (max-width:520px){.plabel{min-width:0;font-size:.8rem}}
+
+#toast{position:fixed;left:50%;bottom:max(24px, env(safe-area-inset-bottom));transform:translate(-50%,20px);z-index:60;opacity:0;
+  background:var(--ink);color:var(--paper);padding:11px 18px;border-radius:18px;box-shadow:var(--shadow);
+  transition:opacity .25s, transform .25s;pointer-events:none;max-width:min(560px,calc(100vw - 32px));text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+dialog{border:0;border-radius:14px;padding:24px;background:var(--card);color:var(--ink);max-width:min(420px,calc(100vw - 32px));box-shadow:var(--shadow)}
+dialog::backdrop{background:rgba(10,8,4,.55)}
+dialog h3{font-family:var(--display);font-weight:400;font-size:1.5rem;margin:0 0 8px}
+dialog p{margin:0 0 20px;color:var(--muted)}
+.dlg-actions{display:flex;justify-content:flex-end;gap:10px}
+.danger{background:#A8322A;color:#fff}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition:none !important;animation:none !important}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ Sign in ============ -->
+<main id="login" hidden>
+  <div class="login-wrap">
+    <div class="login-top">
+      <button class="lamp-btn" data-lamp type="button"></button>
+      <h1>Titiksha's Reading Room</h1>
+    </div>
+    <p class="login-sub">A private library, open whenever you are.</p>
+
+    <div class="card" id="loginCard">
+      <div class="card-head"><b>Borrower's card</b><span>No. 0001</span></div>
+      <div class="card-row"><span class="lbl">Name</span><span class="hand">Titiksha Babu</span></div>
+
+      <div id="emailStep">
+        <div class="card-row"><label for="email">Email</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com"></div>
+        <div class="card-row" id="email2Row" hidden><label for="email2">Once more</label><input id="email2" type="email" autocomplete="email" placeholder="same email again"></div>
+      </div>
+
+      <div id="codeStep" hidden>
+        <div class="card-row"><span class="lbl">Sent to</span><span class="hand sm" id="sentTo"></span></div>
+        <div class="card-row"><label for="code">Code</label><input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></div>
+      </div>
+
+      <p class="hint" id="loginHint"></p>
+      <p class="err" id="loginErr" role="alert"></p>
+      <div class="card-actions">
+        <button class="stamp-btn" id="primaryBtn" type="button">Check in</button>
+        <button class="linkish" id="resendBtn" type="button" hidden>Send a new code</button>
+        <button class="linkish" id="changeEmailBtn" type="button" hidden>Use a different email</button>
+      </div>
+      <div class="stamp" id="stamp" aria-hidden="true">Admitted</div>
+    </div>
+
+    <p class="login-foot" id="loginFoot"></p>
+  </div>
+</main>
+
+<!-- ============ Library ============ -->
+<div id="library" hidden>
+  <header class="wrap topbar">
+    <button class="lamp-btn" data-lamp type="button"></button>
+    <p class="wordmark">Titiksha's Reading Room</p>
+    <label class="search">
+      <span class="sr">Search your books</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="search" type="search" placeholder="Search your shelves">
+    </label>
+    <button class="btn" id="addBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      Add books
+    </button>
+    <button class="ghost" id="signOutBtn" type="button" aria-label="Sign out">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></svg>
+      <span class="signout-txt">Sign out</span>
+    </button>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <p class="today" id="today"></p>
+        <h1 class="greet" id="greet"></h1>
+        <p class="statline" id="statline"></p>
+        <p class="sync" id="sync"><i></i><span></span></p>
+      </div>
+      <div id="continue" hidden></div>
+    </section>
+    <div id="shelves"></div>
+    <footer class="foot" id="footNote"></footer>
+  </main>
+  <input type="file" id="fileInput" multiple accept=".pdf,.epub,.txt,.md,application/pdf,application/epub+zip,text/plain" hidden>
+</div>
+
+<div id="dropOverlay" hidden><div>Drop to shelve these books</div></div>
+
+<!-- ============ Reader ============ -->
+<section id="reader" hidden aria-label="Reader">
+  <div class="rbar">
+    <button class="ghost" id="backBtn" type="button" aria-label="Back to your shelves">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      <span class="back-txt">Shelves</span>
+    </button>
+    <div class="rtitle"><b id="rTitle"></b><span id="rAuthor"></span></div>
+    <div class="rtools">
+      <button class="ghost icon" id="smallerBtn" type="button" aria-label="Smaller">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>
+      </button>
+      <button class="ghost icon" id="biggerBtn" type="button" aria-label="Larger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+      <button class="ghost icon" id="nightBtn" type="button" aria-label="Dim PDF pages in dark mode" aria-pressed="true" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+      </button>
+      <button class="ghost icon" id="finishBtn" type="button" aria-label="Mark as finished" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>
+      </button>
+      <button class="ghost icon" id="removeBtn" type="button" aria-label="Remove from library">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+      </button>
+      <button class="lamp-btn" data-lamp type="button"></button>
+    </div>
+  </div>
+  <div id="stage"></div>
+  <div class="rfoot">
+    <button class="ghost icon" id="prevBtn" type="button" aria-label="Previous page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <input type="range" id="slider" min="0" max="1000" value="0" aria-label="Jump to position">
+    <span class="plabel" id="plabel" aria-live="polite"></span>
+    <button class="ghost icon" id="nextBtn" type="button" aria-label="Next page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+</section>
+
+<dialog id="confirmDlg">
+  <h3>Remove this book?</h3>
+  <p id="dlgText"></p>
+  <div class="dlg-actions">
+    <button class="ghost" id="dlgCancel" type="button">Keep it</button>
+    <button class="btn danger" id="dlgOk" type="button">Remove book</button>
+  </div>
+</dialog>
+
+<div id="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/epub.js/0.3.93/epub.min.js"></script>
+
+<script>
+(() => {
+'use strict';
+
+/* ======================= YOUR SETTINGS ======================= */
+const CONFIG = {
+  firstName: 'Titiksha',
+
+  // Paste these from Supabase: Project Settings → API (or "Connect").
+  // Both are safe to publish. Row Level Security keeps the books private to you.
+  supabaseUrl: 'https://lavyzpgczqxyuidzommr.supabase.co',
+  supabaseKey: 'sb_publishable_AVoSlqiplEjydl8Dbxl4mw_M7C-QRxi',
+
+  // Optional: only send sign-in codes to this email. Leave '' to skip the check.
+  ownerEmail: ''
+};
+/* ============================================================= */
+
+const MAX_UPLOAD = 50 * 1024 * 1024; // Supabase free plan limit per file
+const BUCKET = 'books';
+
+const $ = s => document.querySelector(s);
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); }catch{ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch{} },
+  del(k){ try{ localStorage.removeItem(k); }catch{} }
+};
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const norm = e => (e || '').trim().toLowerCase();
+const settings = Object.assign({ fontSize: 100, pdfNight: true }, store.get('tb-settings', {}));
+const saveSettings = () => store.set('tb-settings', settings);
+
+if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const cloudConfigured = !!(CONFIG.supabaseUrl && CONFIG.supabaseKey);
+let sb = null;
+if (cloudConfigured && window.supabase) {
+  sb = window.supabase.createClient(CONFIG.supabaseUrl.trim(), CONFIG.supabaseKey.trim(), {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+  });
+}
+let user = null;
+
+/* ---------- Toast ---------- */
+let toastTimer;
+function toast(msg, ms = 2800){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), ms);
+}
+
+/* ---------- Theme / banker's lamp ---------- */
+const LAMP_SVG = `<svg class="lamp" viewBox="0 0 48 48" aria-hidden="true">
+  <path class="cone" d="M9 20 L39 20 L47 47 L1 47 Z" fill="#F4C26A"/>
+  <rect x="22.6" y="18" width="2.8" height="22" rx="1" fill="#B88A3B"/>
+  <ellipse cx="24" cy="42" rx="12.5" ry="3.6" fill="#A87A2E"/>
+  <ellipse cx="24" cy="41" rx="12.5" ry="3" fill="#C99A45"/>
+  <ellipse class="bulb" cx="24" cy="20" rx="12" ry="2.6"/>
+  <path d="M7 20 Q7 9 24 9 Q41 9 41 20 Z" fill="#2E6A4E" stroke="#1C4433" stroke-width="1.2"/>
+  <path d="M12 16 Q16 11 24 11" stroke="#7FB89A" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".7"/>
+  <g class="chain"><line x1="35" y1="20" x2="35" y2="28" stroke="#C9A25A" stroke-width="1.2" stroke-dasharray="1.4 1"/><circle cx="35" cy="29.4" r="1.6" fill="#C9A25A"/></g>
+</svg>`;
+const theme = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+function updateLamps(){
+  document.querySelectorAll('[data-lamp]').forEach(b => {
+    b.setAttribute('aria-label', theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+    b.title = theme() === 'dark' ? 'Lights on' : 'Lamp only';
+  });
+}
+function setTheme(t){ document.documentElement.dataset.theme = t; store.set('tb-theme', t); updateLamps(); if (R) applyReaderLook(); }
+document.querySelectorAll('[data-lamp]').forEach(b => {
+  b.innerHTML = LAMP_SVG;
+  b.addEventListener('click', () => setTheme(theme() === 'dark' ? 'light' : 'dark'));
+});
+updateLamps();
+
+/* ---------- IndexedDB: the on-device copy (and the only copy without Supabase) ---------- */
+let dbPromise;
+function db(){
+  if (!dbPromise) dbPromise = new Promise((res, rej) => {
+    const r = indexedDB.open('titiksha-library', 1);
+    r.onupgradeneeded = () => {
+      const d = r.result;
+      if (!d.objectStoreNames.contains('books')) d.createObjectStore('books', { keyPath: 'id' });
+      if (!d.objectStoreNames.contains('files')) d.createObjectStore('files');
+    };
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+  return dbPromise;
+}
+async function tx(name, mode, fn){
+  const d = await db();
+  return new Promise((res, rej) => {
+    const t = d.transaction(name, mode);
+    const req = fn(t.objectStore(name));
+    t.oncomplete = () => res(req ? req.result : undefined);
+    t.onerror = () => rej(t.error);
+    t.onabort = () => rej(t.error);
+  });
+}
+const idb = {
+  allBooks: () => tx('books', 'readonly', s => s.getAll()),
+  putBook: b => tx('books', 'readwrite', s => s.put(b)),
+  delBook: id => tx('books', 'readwrite', s => s.delete(id)),
+  getFile: id => tx('files', 'readonly', s => s.get(id)),
+  putFile: (id, blob) => tx('files', 'readwrite', s => s.put(blob, id)),
+  delFile: id => tx('files', 'readwrite', s => s.delete(id)),
+  clearAll: async () => { await tx('books', 'readwrite', s => s.clear()); await tx('files', 'readwrite', s => s.clear()); }
+};
+
+/* ---------- Sync status ---------- */
+function setSync(state, text){
+  const el = $('#sync'); el.className = 'sync' + (state === 'off' ? ' off' : state === 'busy' ? ' busy' : '');
+  el.querySelector('span').textContent = text;
+}
+
+/* ---------- Library data (cloud + device copy) ---------- */
+const dirty = new Set(store.get('tb-dirty', []));
+const saveDirty = () => store.set('tb-dirty', [...dirty]);
+let warnedSave = false;
+
+function fromRow(r){
+  return {
+    id: r.id, title: r.title, author: r.author || '', format: r.format, size: r.size, filePath: r.file_path,
+    cover: r.cover || null, seed: Number(r.seed) || hashStr(r.id), progress: r.progress || {},
+    finished: !!r.finished, finishedAt: r.finished_at ? Date.parse(r.finished_at) : null,
+    lastOpened: r.last_opened ? Date.parse(r.last_opened) : 0, added: Date.parse(r.added_at) || Date.now()
+  };
+}
+function toRow(b){
+  return {
+    title: b.title, author: b.author || '', progress: b.progress || {}, finished: !!b.finished,
+    finished_at: b.finishedAt ? new Date(b.finishedAt).toISOString() : null,
+    last_opened: b.lastOpened ? new Date(b.lastOpened).toISOString() : null,
+    updated_at: new Date().toISOString()
+  };
+}
+
+function explainCloudError(e){
+  const m = String((e && (e.message || e.error_description || e.code)) || e || '');
+  if (/relation .*books.* does not exist|42P01|schema cache/i.test(m)) return 'Your Supabase project is missing the books table. Run setup.sql in the Supabase SQL editor.';
+  if (/bucket not found/i.test(m)) return 'Your Supabase project is missing the books storage bucket. Run setup.sql in the Supabase SQL editor.';
+  if (/row-level security|violates|permission denied|unauthorized/i.test(m)) return 'Supabase refused the request. Run setup.sql again so the access rules are in place, then sign in again.';
+  if (/exceeded the maximum allowed size|payload too large|413/i.test(m)) return 'That file is larger than the 50 MB the free Supabase plan allows.';
+  if (/quota|storage limit/i.test(m)) return 'Your Supabase storage is full. The free plan holds 1 GB.';
+  if (/failed to fetch|network/i.test(m)) return 'Couldn’t reach Supabase. Check your internet connection.';
+  return m || 'Something went wrong talking to Supabase.';
+}
+
+async function loadBooks(){
+  if (!sb) { setSync('off', 'Saved in this browser only'); return idb.allBooks().catch(() => []); }
+  setSync('busy', 'Syncing your library…');
+  try {
+    const { data, error } = await sb.from('books').select('*').order('added_at', { ascending: true });
+    if (error) throw error;
+    const local = new Map((await idb.allBooks().catch(() => [])).map(b => [b.id, b]));
+    const list = data.map(row => {
+      const b = fromRow(row), l = local.get(b.id);
+      if (l && dirty.has(b.id)) { b.progress = l.progress; b.finished = l.finished; b.finishedAt = l.finishedAt; b.lastOpened = Math.max(b.lastOpened, l.lastOpened || 0); }
+      return b;
+    });
+    const ids = new Set(list.map(b => b.id));
+    list.forEach(b => idb.putBook(b).catch(() => {}));
+    for (const id of local.keys()) if (!ids.has(id)) { idb.delBook(id).catch(() => {}); idb.delFile(id).catch(() => {}); }
+    setSync('on', 'Synced across your devices');
+    return list;
+  } catch (e) {
+    console.warn(e);
+    setSync('off', 'Offline: showing the copy on this device');
+    toast(explainCloudError(e), 6000);
+    return idb.allBooks().catch(() => []);
+  }
+}
+
+async function persist(b){
+  try { await idb.putBook(b); } catch {}
+  if (!sb) return;
+  dirty.add(b.id); saveDirty();
+  try {
+    const { error } = await sb.from('books').update(toRow(b)).eq('id', b.id);
+    if (error) throw error;
+    dirty.delete(b.id); saveDirty();
+    if (warnedSave) { warnedSave = false; setSync('on', 'Synced across your devices'); }
+  } catch (e) {
+    console.warn(e);
+    if (!warnedSave) { warnedSave = true; setSync('off', 'Unsynced changes saved on this device'); toast('Couldn’t save your place online. It’s kept on this device and will sync when you’re connected.', 5000); }
+  }
+}
+async function flushDirty(){
+  if (!sb) return;
+  for (const id of [...dirty]) { const b = books.find(x => x.id === id); if (b) await persist(b); else dirty.delete(id); }
+  saveDirty();
+}
+window.addEventListener('online', flushDirty);
+
+const saveTimers = {};
+function saveSoon(b){ clearTimeout(saveTimers[b.id]); saveTimers[b.id] = setTimeout(() => persist(b), 900); }
+function saveNow(b){ clearTimeout(saveTimers[b.id]); return persist(b); }
+
+async function getBookFile(b){
+  let blob = null;
+  try { blob = await idb.getFile(b.id); } catch {}
+  if (blob) return blob;
+  if (!sb) throw new Error('The stored file is missing.');
+  const { data, error } = await sb.storage.from(BUCKET).download(b.filePath);
+  if (error) throw error;
+  idb.putFile(b.id, data).catch(() => {});
+  return data;
+}
+
+async function deleteBook(b){
+  if (sb) {
+    const { error: e1 } = await sb.storage.from(BUCKET).remove([b.filePath]);
+    if (e1) console.warn(e1);
+    const { error } = await sb.from('books').delete().eq('id', b.id);
+    if (error) throw error;
+  }
+  await idb.delBook(b.id).catch(() => {});
+  await idb.delFile(b.id).catch(() => {});
+  dirty.delete(b.id); saveDirty();
+}
+
+/* ---------- Sign in ---------- */
+let mode = 'email';        // 'email' | 'code'
+let pendingEmail = '';
+let entered = false;
+
+async function sha(s){
+  try {
+    const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+    return [...new Uint8Array(d)].map(x => x.toString(16).padStart(2, '0')).join('');
+  } catch { return 'plain:' + s; }
+}
+
+function setLoginStep(step){
+  mode = step;
+  const err = $('#loginErr'); err.textContent = '';
+  $('#emailStep').hidden = step !== 'email';
+  $('#codeStep').hidden = step !== 'code';
+  $('#resendBtn').hidden = step !== 'code';
+  $('#changeEmailBtn').hidden = step !== 'code';
+  const btn = $('#primaryBtn');
+  if (sb) {
+    $('#email2Row').hidden = true;
+    if (step === 'email') {
+      btn.textContent = 'Send my code';
+      $('#loginHint').textContent = 'Write your email and we’ll send you a sign-in code. No password needed.';
+    } else {
+      btn.textContent = 'Check in';
+      $('#sentTo').textContent = pendingEmail;
+      $('#loginHint').textContent = 'Check your inbox for the code. You can also tap the link in that email on this device.';
+    }
+  } else {
+    const first = !CONFIG.ownerEmail && !store.get('tb-owner', null);
+    $('#email2Row').hidden = !first;
+    btn.textContent = 'Check in';
+    $('#loginHint').textContent = first
+      ? 'First visit: the email you write here becomes the key to this library. Write it twice so a typo can’t lock you out.'
+      : 'Welcome back. Write the email this library knows you by.';
+  }
+  setTimeout(() => (step === 'code' ? $('#code') : $('#email')).focus(), 50);
+}
+
+function showLogin(){
+  entered = false;
+  $('#library').hidden = true; $('#reader').hidden = true; $('#login').hidden = false;
+  $('#stamp').classList.remove('on');
+  $('#loginFoot').textContent = sb
+    ? 'Your books sync to your own private Supabase storage, so they’re on every device you sign in on.'
+    : cloudConfigured
+      ? 'The sign-in service didn’t load. Check your internet connection and refresh the page.'
+      : 'Your books stay in this browser for now. Connect Supabase in index.html to sync them across devices.';
+  setLoginStep(pendingEmail && sb ? 'code' : 'email');
+}
+
+function busy(on, label){
+  const b = $('#primaryBtn'); b.disabled = on;
+  if (on) b.textContent = label; else setLoginStep(mode);
+}
+
+async function sendCode(email){
+  const { error } = await sb.auth.signInWithOtp({
+    email, options: { emailRedirectTo: location.origin + location.pathname }
+  });
+  if (error) {
+    const m = error.message || '';
+    if (/rate|security purposes|too many/i.test(m)) throw new Error('Too many codes were sent recently. Wait a minute or two, then try again.');
+    if (/signups not allowed|not allowed for otp/i.test(m)) throw new Error('This library only admits its owner. Check the email and try again.');
+    throw new Error(explainCloudError(error));
+  }
+}
+
+async function onPrimary(){
+  const err = $('#loginErr'); err.textContent = '';
+  if (cloudConfigured && !sb) { err.textContent = 'The sign-in service didn’t load. Check your connection and refresh the page.'; return; }
+
+  if (sb && mode === 'email') {
+    const email = norm($('#email').value);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Enter a full email address, like name@example.com.'; return; }
+    if (CONFIG.ownerEmail && email !== norm(CONFIG.ownerEmail)) { err.textContent = 'That email isn’t on this library’s card. Check for typos and try again.'; return; }
+    busy(true, 'Sending…');
+    try { await sendCode(email); pendingEmail = email; mode = 'code'; busy(false); toast('Code sent. Check your inbox.'); }
+    catch (e) { busy(false); $('#loginErr').textContent = e.message; }
+    return;
+  }
+
+  if (sb && mode === 'code') {
+    const token = $('#code').value.replace(/\D/g, '');
+    if (token.length < 6) { err.textContent = 'Enter the code from your email. It’s at least 6 digits.'; return; }
+    busy(true, 'Checking…');
+    const { data, error } = await sb.auth.verifyOtp({ email: pendingEmail, token, type: 'email' });
+    if (error || !data.session) {
+      busy(false);
+      $('#loginErr').textContent = 'That code didn’t work. It may have expired. Send a new code and try again.';
+      return;
+    }
+    $('#primaryBtn').disabled = false;
+    user = data.session.user; pendingEmail = ''; $('#code').value = '';
+    $('#stamp').classList.add('on');
+    setTimeout(enterLibrary, 750);
+    return;
+  }
+
+  // Device-only mode (no Supabase settings yet)
+  const email = norm($('#email').value);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Enter a full email address, like name@example.com.'; return; }
+  const h = await sha(email);
+  if (CONFIG.ownerEmail) {
+    if (email !== norm(CONFIG.ownerEmail)) { err.textContent = 'That email isn’t on this library’s card. Check for typos and try again.'; return; }
+  } else {
+    const owner = store.get('tb-owner', null);
+    if (!owner) {
+      if (norm($('#email2').value) !== email) { err.textContent = 'The two emails don’t match yet. Check both and try again.'; return; }
+      store.set('tb-owner', h);
+    } else if (owner !== h) { err.textContent = 'That email isn’t on this library’s card. Check for typos and try again.'; return; }
+  }
+  store.set('tb-session', { h, at: Date.now() });
+  $('#stamp').classList.add('on');
+  setTimeout(enterLibrary, 750);
+}
+
+// A plain button (not a form) so the click works everywhere, including sandboxed previews.
+$('#primaryBtn').addEventListener('click', onPrimary);
+['#email', '#email2', '#code'].forEach(s => $(s).addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); onPrimary(); } }));
+$('#changeEmailBtn').addEventListener('click', () => { pendingEmail = ''; $('#code').value = ''; setLoginStep('email'); });
+$('#resendBtn').addEventListener('click', async () => {
+  $('#loginErr').textContent = '';
+  try { await sendCode(pendingEmail); toast('A new code is on its way.'); }
+  catch (e) { $('#loginErr').textContent = e.message; }
+});
+
+async function localSessionValid(){
+  const s = store.get('tb-session', null); if (!s) return false;
+  if (CONFIG.ownerEmail) return s.h === await sha(norm(CONFIG.ownerEmail));
+  return s.h === store.get('tb-owner', null);
+}
+
+$('#signOutBtn').addEventListener('click', async () => {
+  await closeReader();
+  if (sb) {
+    await flushDirty();
+    try { await sb.auth.signOut(); } catch {}
+    user = null;
+    await idb.clearAll().catch(() => {}); // remove the device copy; your books stay safe in Supabase
+    books = [];
+  } else {
+    store.del('tb-session');
+  }
+  $('#email').value = ''; $('#email2').value = '';
+  showLogin();
+  toast('Signed out. See you soon.');
+});
+
+/* ---------- Library view ---------- */
+let books = [];
+const PALETTE = ['#7B2D26','#2F5D46','#27406B','#8F6420','#5A3559','#2D5F66','#8C4A23','#46512C','#6E2F3F','#3A3F57','#7A5A2C','#1F4A3C'];
+function hashStr(s){ let h = 2166136261; for (let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+const pct = b => Math.round(((b.progress && b.progress.percent) || 0) * 100);
+
+async function enterLibrary(){
+  if (entered) return;
+  entered = true;
+  $('#login').hidden = true; $('#library').hidden = false;
+  const now = new Date(), hr = now.getHours(), n = CONFIG.firstName;
+  $('#today').textContent = now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+  $('#greet').textContent =
+    hr < 5 ? `Up late, ${n}?` : hr < 12 ? `Good morning, ${n}.` : hr < 17 ? `Good afternoon, ${n}.` :
+    hr < 22 ? `Good evening, ${n}.` : `One more chapter, ${n}?`;
+  $('#footNote').textContent = sb
+    ? 'Your books live in your private Supabase storage and sync to every device you sign in on. Drag files anywhere onto the page to shelve them.'
+    : 'Books you add are kept in this browser only. Connect Supabase in index.html to sync them across devices. Drag files anywhere onto the page to shelve them.';
+  books = await loadBooks();
+  renderLibrary();
+  flushDirty();
+  if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+}
+
+// Pick up changes made on another device when you come back to this tab.
+document.addEventListener('visibilitychange', async () => {
+  if (document.hidden) { if (R) persist(R.book); return; }
+  if (sb && entered && !R) { books = await loadBooks(); renderLibrary(); }
+});
+window.addEventListener('pagehide', () => { if (R) persist(R.book); });
+
+function renderLibrary(){
+  const total = books.length, done = books.filter(b => b.finished).length;
+  const reading = books.filter(b => b.lastOpened && !b.finished).length;
+  $('#statline').textContent = total
+    ? `${total} ${total === 1 ? 'book' : 'books'} on your shelves. ${reading ? reading + ' in progress, ' : ''}${done} finished.`
+    : 'Your shelves are empty. Add a PDF or EPUB and it’ll appear here, ready to read.';
+  renderContinue();
+  renderShelves();
+}
+
+function coverEl(b){
+  if (b.cover) { const img = document.createElement('img'); img.className = 'cover'; img.src = b.cover; img.alt = ''; return img; }
+  const d = document.createElement('div'); d.className = 'cover';
+  d.style.setProperty('--c', PALETTE[b.seed % PALETTE.length]); d.textContent = b.title; return d;
+}
+
+function renderContinue(){
+  const el = $('#continue'); el.innerHTML = '';
+  const b = books.filter(x => x.lastOpened && !x.finished).sort((a, c) => c.lastOpened - a.lastOpened)[0];
+  if (!b) { el.hidden = true; return; }
+  el.hidden = false;
+  const box = document.createElement('div'); box.className = 'continue';
+  const body = document.createElement('div'); body.className = 'continue-body';
+  const s = document.createElement('small'); s.textContent = 'Pick up where you left off';
+  const h = document.createElement('h3'); h.textContent = b.title;
+  body.append(s, h);
+  if (b.author) { const by = document.createElement('div'); by.className = 'by'; by.textContent = b.author; body.append(by); }
+  const bar = document.createElement('div'); bar.className = 'bar'; const i = document.createElement('i'); i.style.width = pct(b) + '%'; bar.append(i);
+  const lab = document.createElement('small');
+  lab.textContent = b.format === 'pdf' && b.progress && b.progress.page ? `Page ${b.progress.page} of ${b.progress.total}, ${pct(b)}% read` : `${pct(b)}% read`;
+  const btn = document.createElement('button'); btn.className = 'btn'; btn.type = 'button'; btn.textContent = 'Resume reading';
+  btn.addEventListener('click', () => openBook(b.id));
+  body.append(bar, lab, btn);
+  box.append(coverEl(b), body); el.append(box);
+}
+
+function spineEl(b){
+  const el = document.createElement('button'); el.type = 'button'; el.className = 'spine';
+  const seed = b.seed;
+  el.style.setProperty('--c', PALETTE[seed % PALETTE.length]);
+  el.style.height = (166 + (seed >>> 4) % 46) + 'px';
+  el.style.width = (40 + (seed >>> 9) % 20) + 'px';
+  el.dataset.v = String((seed >>> 13) % 3);
+  const t = document.createElement('span'); t.className = 't'; t.textContent = b.title;
+  const f = document.createElement('span'); f.className = 'f'; f.textContent = b.format;
+  el.append(t, f);
+  if (b.lastOpened && !b.finished) {
+    const r = document.createElement('span'); r.className = 'ribbon'; el.append(r);
+    const p = document.createElement('span'); p.className = 'p'; const i = document.createElement('i'); i.style.width = pct(b) + '%'; p.append(i); el.append(p);
+  }
+  const status = b.finished ? 'finished' : b.lastOpened ? `${pct(b)}% read` : 'not started';
+  el.title = `${b.title}${b.author ? ' by ' + b.author : ''} (${status})`;
+  el.setAttribute('aria-label', `Open ${b.title}, ${status}`);
+  el.addEventListener('click', () => openBook(b.id));
+  return el;
+}
+
+function shelfEl(name, list, emptyText){
+  const sec = document.createElement('section'); sec.className = 'shelf';
+  const head = document.createElement('div'); head.className = 'shelf-head';
+  const plate = document.createElement('h2'); plate.className = 'plate'; plate.textContent = name;
+  const count = document.createElement('span'); count.className = 'shelf-count';
+  count.textContent = list.length ? `${list.length} ${list.length === 1 ? 'book' : 'books'}` : '';
+  head.append(plate, count);
+  const kase = document.createElement('div'); kase.className = 'case';
+  const row = document.createElement('div'); row.className = 'row';
+  if (list.length) list.forEach(b => row.append(spineEl(b)));
+  else { const e = document.createElement('p'); e.className = 'shelf-empty'; e.textContent = emptyText; row.append(e); }
+  const plank = document.createElement('div'); plank.className = 'plank';
+  kase.append(row, plank); sec.append(head, kase);
+  return sec;
+}
+
+function renderShelves(){
+  const wrap = $('#shelves'); wrap.innerHTML = '';
+  if (!books.length) {
+    const d = document.createElement('div'); d.className = 'empty-drop';
+    d.innerHTML = '<h3>Start your collection</h3><p>Add PDFs, EPUBs, or plain text files. Drag them onto the page or choose them from your computer.</p>';
+    const b = document.createElement('button'); b.className = 'btn'; b.type = 'button'; b.textContent = 'Choose books';
+    b.addEventListener('click', () => $('#fileInput').click());
+    d.append(b); wrap.append(d);
+  }
+  const q = norm($('#search').value);
+  const list = books.filter(b => !q || (b.title + ' ' + (b.author || '')).toLowerCase().includes(q));
+  if (q && !list.length) {
+    const p = document.createElement('p'); p.className = 'statline'; p.style.marginBottom = '40px';
+    p.textContent = `No books match “${$('#search').value.trim()}”. Try part of a title or an author’s name.`;
+    wrap.append(p); return;
+  }
+  const reading = list.filter(b => b.lastOpened && !b.finished).sort((a, c) => c.lastOpened - a.lastOpened);
+  const tbr = list.filter(b => !b.lastOpened && !b.finished).sort((a, c) => c.added - a.added);
+  const done = list.filter(b => b.finished).sort((a, c) => (c.finishedAt || 0) - (a.finishedAt || 0));
+  wrap.append(
+    shelfEl('Currently reading', reading, 'Open any book and it moves here.'),
+    shelfEl('Waiting to be read', tbr, 'New books land on this shelf.'),
+    shelfEl('Finished', done, 'Books you finish get shelved here.')
+  );
+}
+$('#search').addEventListener('input', renderShelves);
+
+/* ---------- Adding books ---------- */
+function detectFormat(f){
+  const ext = (f.name.split('.').pop() || '').toLowerCase();
+  if (ext === 'pdf' || f.type === 'application/pdf') return 'pdf';
+  if (ext === 'epub' || f.type === 'application/epub+zip') return 'epub';
+  if (ext === 'txt' || ext === 'md' || f.type === 'text/plain') return 'txt';
+  return null;
+}
+const MIME = { pdf: 'application/pdf', epub: 'application/epub+zip', txt: 'text/plain' };
+const cleanName = n => n.replace(/\.[^.]+$/, '').replace(/_+/g, ' ').replace(/\s*-\s*/g, ' - ').replace(/\s+/g, ' ').trim() || 'Untitled';
+const withTimeout = (p, ms) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))]);
+const uuid = () => (crypto.randomUUID ? crypto.randomUUID() :
+  'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); }));
+function thumbFrom(src, w = 240){
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => {
+      const s = w / img.naturalWidth, c = document.createElement('canvas');
+      c.width = w; c.height = Math.round(img.naturalHeight * s);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      try { res(c.toDataURL('image/jpeg', .8)); } catch (e) { rej(e); }
+    };
+    img.onerror = rej; img.src = src;
+  });
+}
+
+async function readDetails(f, format){
+  let title = cleanName(f.name), author = '', cover = null, total = null;
+  try {
+    if (format === 'pdf' && window.pdfjsLib) {
+      const doc = await withTimeout(pdfjsLib.getDocument({ data: new Uint8Array(await f.arrayBuffer()) }).promise, 15000);
+      total = doc.numPages;
+      try { const m = await doc.getMetadata(); if (m && m.info && m.info.Author) author = String(m.info.Author).trim(); } catch {}
+      try {
+        const page = await doc.getPage(1), base = page.getViewport({ scale: 1 }), vp = page.getViewport({ scale: 240 / base.width });
+        const c = document.createElement('canvas'); c.width = Math.round(vp.width); c.height = Math.round(vp.height);
+        await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+        cover = c.toDataURL('image/jpeg', .8);
+      } catch {}
+      doc.destroy();
+    } else if (format === 'epub' && window.ePub) {
+      const bk = ePub(await f.arrayBuffer());
+      try {
+        const md = await withTimeout(bk.loaded.metadata, 10000);
+        if (md && md.title) title = md.title.trim();
+        if (md && md.creator) author = md.creator.trim();
+      } catch {}
+      try { const url = await withTimeout(bk.coverUrl(), 8000); if (url) cover = await thumbFrom(url); } catch {}
+      try { bk.destroy(); } catch {}
+    }
+  } catch (e) { console.warn('Couldn’t read details for', f.name, e); }
+  return { title, author, cover, total };
+}
+
+async function addOne(f, format){
+  const d = await readDetails(f, format);
+  const id = uuid();
+  const seed = hashStr(id + d.title);
+  if (sb) {
+    const path = `${user.id}/${id}.${format}`;
+    const { error: upErr } = await sb.storage.from(BUCKET).upload(path, f, { contentType: f.type || MIME[format], upsert: false });
+    if (upErr) throw upErr;
+    const row = { id, user_id: user.id, title: d.title, author: d.author, format, size: f.size, file_path: path,
+      cover: d.cover, seed, progress: { percent: 0, total: d.total } };
+    const { data, error } = await sb.from('books').insert(row).select().single();
+    if (error) { await sb.storage.from(BUCKET).remove([path]).catch(() => {}); throw error; }
+    const book = fromRow(data);
+    idb.putFile(id, f).catch(() => {}); idb.putBook(book).catch(() => {});
+    return book;
+  }
+  const book = { id, title: d.title, author: d.author, format, size: f.size, added: Date.now(), lastOpened: 0, finished: false,
+    progress: { percent: 0, total: d.total }, cover: d.cover, seed };
+  await idb.putFile(id, f);
+  await idb.putBook(book);
+  return book;
+}
+
+let importing = false;
+async function importFiles(fileList){
+  const files = [...fileList];
+  if (!files.length) return;
+  if (importing) { toast('Still shelving the last batch. Add these once it finishes.'); return; }
+  importing = true;
+  if (sb) setSync('busy', 'Uploading…');
+  let added = 0; const problems = [];
+  for (let i = 0; i < files.length; i++) {
+    const f = files[i], format = detectFormat(f);
+    if (!format) { problems.push(`${f.name}: only PDF, EPUB and TXT files work`); continue; }
+    if (sb && f.size > MAX_UPLOAD) { problems.push(`${f.name}: larger than the 50 MB free-plan limit`); continue; }
+    toast(files.length > 1 ? `Shelving ${i + 1} of ${files.length}: ${cleanName(f.name)}` : `Shelving ${cleanName(f.name)}…`, 120000);
+    try { const b = await addOne(f, format); books.push(b); added++; renderLibrary(); }
+    catch (e) { console.error(e); problems.push(`${f.name}: ${sb ? explainCloudError(e) : 'this browser couldn’t store it'}`); }
+  }
+  importing = false;
+  if (sb) setSync('on', 'Synced across your devices');
+  renderLibrary();
+  if (problems.length) toast((added ? `Shelved ${added}. ` : '') + `Couldn’t add ${problems.length}. ${problems[0]}`, 8000);
+  else toast(`Shelved ${added} ${added === 1 ? 'book' : 'books'}.`);
+}
+$('#addBtn').addEventListener('click', () => $('#fileInput').click());
+$('#fileInput').addEventListener('change', e => { importFiles(e.target.files); e.target.value = ''; });
+
+let dragDepth = 0;
+const hasFiles = e => e.dataTransfer && [...e.dataTransfer.types].includes('Files');
+window.addEventListener('dragenter', e => { if ($('#library').hidden || R || !hasFiles(e)) return; e.preventDefault(); dragDepth++; $('#dropOverlay').hidden = false; });
+window.addEventListener('dragover', e => { if (hasFiles(e)) e.preventDefault(); });
+window.addEventListener('dragleave', () => { dragDepth = Math.max(0, dragDepth - 1); if (!dragDepth) $('#dropOverlay').hidden = true; });
+window.addEventListener('drop', e => {
+  if (!hasFiles(e)) return;
+  e.preventDefault(); dragDepth = 0; $('#dropOverlay').hidden = true;
+  if (!$('#library').hidden && !R) importFiles(e.dataTransfer.files);
+});
+
+/* ---------- Reader ---------- */
+let R = null;
+const stage = $('#stage'), slider = $('#slider'), plabel = $('#plabel');
+
+async function openBook(id){
+  const b = books.find(x => x.id === id); if (!b) return;
+  if (R) await closeReader(true);
+  const r = { book: b, type: b.format };
+  R = r;
+  $('#reader').hidden = false; document.body.style.overflow = 'hidden';
+  $('#rTitle').textContent = b.title; $('#rAuthor').textContent = b.author || '';
+  stage.innerHTML = '<div class="loading">Fetching it from the stacks…</div>';
+  plabel.textContent = ''; slider.disabled = true;
+  setupTools();
+  try {
+    // Grab your latest place in case you read further on another device.
+    if (sb && !dirty.has(b.id)) {
+      try {
+        const { data } = await sb.from('books').select('progress,finished,finished_at,last_opened').eq('id', b.id).maybeSingle();
+        if (data) { b.progress = data.progress || b.progress; b.finished = !!data.finished; b.finishedAt = data.finished_at ? Date.parse(data.finished_at) : null; updateFinishBtn(); }
+      } catch {}
+    }
+    const file = await getBookFile(b);
+    const buf = await file.arrayBuffer();
+    if (R !== r) return;
+    b.lastOpened = Date.now(); saveSoon(b);
+    if (b.format === 'pdf') await openPdf(r, buf);
+    else if (b.format === 'epub') await openEpub(r, buf);
+    else await openTxt(r, buf);
+  } catch (e) {
+    console.error(e);
+    if (R !== r) return;
+    const missingLib = (b.format === 'pdf' && !window.pdfjsLib) || (b.format === 'epub' && !window.ePub);
+    stage.innerHTML = '';
+    const d = document.createElement('div'); d.className = 'loading';
+    d.textContent = missingLib ? 'The reader couldn’t load. Check your internet connection and refresh the page.'
+      : sb && /fetch|network/i.test(String(e && e.message)) ? 'Couldn’t download this book. Check your internet connection and try again.'
+      : 'This book couldn’t be opened. The file may be damaged. Try removing it and adding it again.';
+    stage.append(d);
+  }
+}
+
+function setupTools(){
+  const r = R; if (!r) return;
+  const isPdf = r.type === 'pdf';
+  const s = $('#smallerBtn'), g = $('#biggerBtn');
+  s.setAttribute('aria-label', isPdf ? 'Zoom out' : 'Smaller text'); s.title = s.getAttribute('aria-label');
+  g.setAttribute('aria-label', isPdf ? 'Zoom in' : 'Larger text'); g.title = g.getAttribute('aria-label');
+  $('#nightBtn').hidden = !isPdf || theme() !== 'dark';
+  $('#nightBtn').setAttribute('aria-pressed', String(settings.pdfNight));
+  $('#nightBtn').title = 'Dim PDF pages in dark mode';
+  updateFinishBtn();
+}
+function updateFinishBtn(){
+  const b = R && R.book; if (!b) return;
+  const f = $('#finishBtn');
+  f.setAttribute('aria-pressed', String(!!b.finished));
+  f.setAttribute('aria-label', b.finished ? 'Move back to currently reading' : 'Mark as finished');
+  f.title = f.getAttribute('aria-label');
+}
+
+function applyReaderLook(){
+  const r = R; if (!r) return;
+  stage.classList.toggle('night', r.type === 'pdf' && theme() === 'dark' && settings.pdfNight);
+  $('#nightBtn').hidden = r.type !== 'pdf' || theme() !== 'dark';
+  if (r.type === 'epub' && r.rend) { r.rend.themes.select(theme()); r.rend.themes.fontSize(settings.fontSize + '%'); }
+  if (r.type === 'txt' && r.page) r.page.style.fontSize = (settings.fontSize / 100 * 1.12) + 'rem';
+}
+
+async function closeReader(keepOpen){
+  const r = R; if (!r) return;
+  R = null;
+  saveNow(r.book);
+  try { if (r.task) r.task.cancel(); } catch {}
+  try { if (r.rend) r.rend.destroy(); } catch {}
+  try { if (r.epub) r.epub.destroy(); } catch {}
+  try { if (r.doc) r.doc.destroy(); } catch {}
+  stage.innerHTML = ''; stage.classList.remove('night');
+  if (!keepOpen) { $('#reader').hidden = true; document.body.style.overflow = ''; renderLibrary(); }
+}
+
+function setLabel(text, sliderVal){
+  plabel.textContent = text;
+  if (sliderVal != null && document.activeElement !== slider) slider.value = sliderVal;
+}
+
+/* PDF */
+async function openPdf(r, buf){
+  if (!window.pdfjsLib) throw new Error('pdf.js missing');
+  const doc = await pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise;
+  if (R !== r) { doc.destroy(); return; }
+  r.doc = doc; r.total = doc.numPages; r.zoom = 1;
+  r.page = clamp((r.book.progress && r.book.progress.page) || 1, 1, r.total);
+  stage.innerHTML = '';
+  const sc = document.createElement('div'); sc.className = 'pdf-scroll';
+  const cv = document.createElement('canvas'); sc.append(cv); stage.append(sc);
+  r.scroller = sc; r.canvas = cv;
+  slider.min = 1; slider.max = r.total; slider.step = 1; slider.disabled = r.total < 2;
+  addSwipe(sc);
+  applyReaderLook();
+  updatePdfProgress();
+  await renderPdf();
+}
+async function renderPdf(){
+  const r = R; if (!r || r.type !== 'pdf' || !r.doc) return;
+  const n = r.page;
+  const page = await r.doc.getPage(n);
+  if (R !== r || r.page !== n) return;
+  const base = page.getViewport({ scale: 1 });
+  const aw = Math.max(100, r.scroller.clientWidth - 32), ah = Math.max(100, r.scroller.clientHeight - 32);
+  const scale = Math.max(.2, Math.min(aw / base.width, ah / base.height) * r.zoom);
+  const vp = page.getViewport({ scale });
+  const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  if (r.task) { try { r.task.cancel(); } catch {} }
+  const off = document.createElement('canvas');
+  off.width = Math.floor(vp.width * dpr); off.height = Math.floor(vp.height * dpr);
+  const task = page.render({ canvasContext: off.getContext('2d'), viewport: vp, transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null });
+  r.task = task;
+  try { await task.promise; } catch { return; }
+  if (R !== r || r.page !== n) return;
+  const cv = r.canvas;
+  cv.width = off.width; cv.height = off.height;
+  cv.style.width = Math.floor(vp.width) + 'px'; cv.style.height = Math.floor(vp.height) + 'px';
+  cv.getContext('2d').drawImage(off, 0, 0);
+}
+function updatePdfProgress(){
+  const r = R, b = r.book;
+  b.progress = { page: r.page, total: r.total, percent: r.page / r.total };
+  setLabel(`Page ${r.page} of ${r.total}`, r.page);
+  saveSoon(b);
+  if (r.page === r.total && !b.finished && !r.endHinted) { r.endHinted = true; toast('Last page! Tap the check mark to shelve it as finished.', 4000); }
+}
+function gotoPdf(n){
+  const r = R; n = clamp(n, 1, r.total);
+  if (n === r.page) return;
+  r.page = n; r.scroller.scrollTop = 0; updatePdfProgress(); renderPdf();
+}
+
+/* EPUB */
+function registerEpubThemes(rend){
+  const font = 'Georgia, "Iowan Old Style", "Palatino Linotype", serif';
+  rend.themes.register('light', {
+    'html': { 'background': '#F8F4E8 !important' },
+    'body': { 'color': '#2E2418 !important', 'background': '#F8F4E8 !important', 'font-family': font, 'line-height': '1.65' },
+    'p, li, span, div, h1, h2, h3, h4, blockquote': { 'color': 'inherit !important' },
+    'a': { 'color': '#2F5D46 !important' }
+  });
+  rend.themes.register('dark', {
+    'html': { 'background': '#18231D !important' },
+    'body': { 'color': '#ECE2CB !important', 'background': '#18231D !important', 'font-family': font, 'line-height': '1.65' },
+    'p, li, span, div, h1, h2, h3, h4, blockquote': { 'color': 'inherit !important', 'background': 'transparent !important' },
+    'a': { 'color': '#8CC2A0 !important' }
+  });
+}
+async function openEpub(r, buf){
+  if (!window.ePub) throw new Error('epub.js missing');
+  const bk = ePub(buf); r.epub = bk;
+  stage.innerHTML = '';
+  const host = document.createElement('div'); host.className = 'epub-host'; stage.append(host);
+  const L = document.createElement('button'), Rt = document.createElement('button');
+  L.className = 'tapzone l'; Rt.className = 'tapzone r';
+  L.setAttribute('aria-label', 'Previous page'); Rt.setAttribute('aria-label', 'Next page');
+  L.tabIndex = -1; Rt.tabIndex = -1;
+  L.addEventListener('click', prev); Rt.addEventListener('click', next);
+  stage.append(L, Rt);
+  const rend = bk.renderTo(host, { width: '100%', height: '100%', flow: 'paginated', spread: 'auto' });
+  r.rend = rend;
+  registerEpubThemes(rend);
+  applyReaderLook();
+  slider.min = 0; slider.max = 1000; slider.step = 1; slider.disabled = true;
+  rend.on('relocated', loc => { if (R === r) { r.loc = loc; updateEpubProgress(); } });
+  rend.on('keyup', onKey);
+  let tx0 = null, ty0 = null;
+  rend.on('touchstart', e => { const t = e.changedTouches && e.changedTouches[0]; if (t) { tx0 = t.screenX; ty0 = t.screenY; } });
+  rend.on('touchend', e => {
+    const t = e.changedTouches && e.changedTouches[0]; if (!t || tx0 == null) return;
+    const dx = t.screenX - tx0, dy = t.screenY - ty0; tx0 = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) (dx < 0 ? next : prev)();
+  });
+  setLabel('Opening…');
+  const saved = r.book.progress && r.book.progress.cfi;
+  try { await rend.display(saved || undefined); } catch { await rend.display(); }
+  bk.ready
+    .then(() => bk.locations.generate(1400))
+    .then(() => { if (R === r) { r.locReady = true; slider.disabled = false; updateEpubProgress(); } })
+    .catch(() => {});
+}
+function updateEpubProgress(){
+  const r = R, b = r.book, loc = r.loc;
+  const cfi = loc && loc.start && loc.start.cfi; if (!cfi) return;
+  let p = (b.progress && b.progress.percent) || 0;
+  if (r.locReady) { const v = r.epub.locations.percentageFromCfi(cfi); if (typeof v === 'number' && !isNaN(v)) p = v; }
+  if (loc.atEnd) p = 1;
+  b.progress = { cfi, percent: p };
+  const chap = loc.start.displayed;
+  const chapTxt = chap && chap.total ? `, page ${chap.page} of ${chap.total} in chapter` : '';
+  setLabel(r.locReady ? `${Math.round(p * 100)}% read${window.innerWidth > 700 ? chapTxt : ''}` : 'Measuring the book…', Math.round(p * 1000));
+  saveSoon(b);
+  if (loc.atEnd && !b.finished && !r.endHinted) { r.endHinted = true; toast('You reached the end! Tap the check mark to shelve it as finished.', 4000); }
+}
+
+/* Plain text */
+async function openTxt(r, buf){
+  const text = new TextDecoder('utf-8').decode(buf).replace(/\r\n?/g, '\n');
+  stage.innerHTML = '';
+  const sc = document.createElement('div'); sc.className = 'txt-scroll';
+  const page = document.createElement('article'); page.className = 'txt-page';
+  const frag = document.createDocumentFragment();
+  for (const para of text.split(/\n\s*\n/)) {
+    const t = para.trim().replace(/\s*\n\s*/g, ' ');
+    if (!t) continue;
+    const p = document.createElement('p'); p.textContent = t; frag.append(p);
+  }
+  page.append(frag); sc.append(page); stage.append(sc);
+  r.scroller = sc; r.page = page;
+  applyReaderLook();
+  slider.min = 0; slider.max = 1000; slider.step = 1; slider.disabled = false;
+  requestAnimationFrame(() => {
+    if (R !== r) return;
+    const max = sc.scrollHeight - sc.clientHeight;
+    sc.scrollTop = ((r.book.progress && r.book.progress.percent) || 0) * max;
+    updateTxtProgress();
+    sc.addEventListener('scroll', () => { if (R === r) updateTxtProgress(); }, { passive: true });
+  });
+}
+function updateTxtProgress(){
+  const r = R, sc = r.scroller;
+  const max = Math.max(1, sc.scrollHeight - sc.clientHeight);
+  const p = clamp(sc.scrollTop / max, 0, 1);
+  r.book.progress = { percent: p };
+  setLabel(`${Math.round(p * 100)}% read`, Math.round(p * 1000));
+  saveSoon(r.book);
+}
+
+/* Navigation */
+function next(){
+  const r = R; if (!r) return;
+  if (r.type === 'pdf' && r.doc) gotoPdf(r.page + 1);
+  else if (r.type === 'epub' && r.rend) r.rend.next();
+  else if (r.scroller) r.scroller.scrollBy({ top: r.scroller.clientHeight * .9, behavior: 'smooth' });
+}
+function prev(){
+  const r = R; if (!r) return;
+  if (r.type === 'pdf' && r.doc) gotoPdf(r.page - 1);
+  else if (r.type === 'epub' && r.rend) r.rend.prev();
+  else if (r.scroller) r.scroller.scrollBy({ top: -r.scroller.clientHeight * .9, behavior: 'smooth' });
+}
+$('#nextBtn').addEventListener('click', next);
+$('#prevBtn').addEventListener('click', prev);
+$('#backBtn').addEventListener('click', () => closeReader());
+
+slider.addEventListener('input', () => {
+  const r = R; if (!r) return;
+  const v = Number(slider.value);
+  plabel.textContent = r.type === 'pdf' ? `Go to page ${v} of ${r.total}` : `Go to ${Math.round(v / 10)}%`;
+});
+slider.addEventListener('change', () => {
+  const r = R; if (!r) return;
+  const v = Number(slider.value);
+  if (r.type === 'pdf') gotoPdf(v);
+  else if (r.type === 'epub' && r.locReady) { const cfi = r.epub.locations.cfiFromPercentage(v / 1000); if (cfi) r.rend.display(cfi); }
+  else if (r.type === 'txt') { const sc = r.scroller; sc.scrollTop = (v / 1000) * (sc.scrollHeight - sc.clientHeight); }
+});
+
+function onKey(e){
+  if (!R) return;
+  if (e.target && e.target.matches && e.target.matches('input, textarea')) return;
+  if (document.querySelector('dialog[open]')) return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') { if (e.preventDefault) e.preventDefault(); next(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { if (e.preventDefault) e.preventDefault(); prev(); }
+  else if (e.key === 'Escape') closeReader();
+}
+document.addEventListener('keydown', onKey);
+
+function addSwipe(el){
+  let x0 = null, y0 = null;
+  el.addEventListener('touchstart', e => { if (e.touches.length !== 1) { x0 = null; return; } x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  el.addEventListener('touchend', e => {
+    if (x0 == null || !R || R.zoom > 1) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) (dx < 0 ? next : prev)();
+  }, { passive: true });
+}
+
+function resize(dir){
+  const r = R; if (!r) return;
+  if (r.type === 'pdf') {
+    r.zoom = clamp(Math.round((r.zoom + dir * .25) * 100) / 100, .5, 3);
+    renderPdf(); toast(`Zoom ${Math.round(r.zoom * 100)}%`, 1200);
+  } else {
+    settings.fontSize = clamp(settings.fontSize + dir * 10, 70, 200); saveSettings();
+    applyReaderLook(); toast(`Text size ${settings.fontSize}%`, 1200);
+  }
+}
+$('#smallerBtn').addEventListener('click', () => resize(-1));
+$('#biggerBtn').addEventListener('click', () => resize(1));
+$('#nightBtn').addEventListener('click', () => {
+  settings.pdfNight = !settings.pdfNight; saveSettings();
+  $('#nightBtn').setAttribute('aria-pressed', String(settings.pdfNight));
+  applyReaderLook();
+});
+
+$('#finishBtn').addEventListener('click', () => {
+  const b = R && R.book; if (!b) return;
+  b.finished = !b.finished;
+  b.finishedAt = b.finished ? Date.now() : null;
+  saveNow(b); updateFinishBtn();
+  toast(b.finished ? `Shelved “${b.title}” under Finished. Well read!` : 'Moved back to Currently reading.');
+});
+
+const dlg = $('#confirmDlg');
+$('#removeBtn').addEventListener('click', () => {
+  const b = R && R.book; if (!b) return;
+  $('#dlgText').textContent = sb
+    ? `“${b.title}” and your place in it will be deleted from your library on every device. You can add the file again any time.`
+    : `“${b.title}” and your place in it will be deleted from this browser. You can add the file again any time.`;
+  dlg.showModal();
+});
+$('#dlgCancel').addEventListener('click', () => dlg.close());
+$('#dlgOk').addEventListener('click', async () => {
+  dlg.close();
+  const b = R && R.book; if (!b) return;
+  await closeReader();
+  try {
+    await deleteBook(b);
+    books = books.filter(x => x.id !== b.id);
+    renderLibrary();
+    toast(`Removed “${b.title}”.`);
+  } catch (e) {
+    console.error(e);
+    toast(`Couldn’t remove “${b.title}”. ${explainCloudError(e)}`, 6000);
+  }
+});
+
+let rz;
+window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if (R && R.type === 'pdf') renderPdf(); }, 180); });
+
+/* ---------- Start ---------- */
+(async () => {
+  if (sb) {
+    sb.auth.onAuthStateChange((event, session) => {
+      if (session && session.user) user = session.user;
+      if (event === 'SIGNED_IN' && session && !entered) {
+        // Signed in by tapping the email link
+        pendingEmail = '';
+        setTimeout(enterLibrary, 0);
+      }
+      if (event === 'SIGNED_OUT' && entered) setTimeout(showLogin, 0);
+    });
+    const { data } = await sb.auth.getSession();
+    if (data && data.session) { user = data.session.user; enterLibrary(); }
+    else showLogin();
+  } else {
+    if (await localSessionValid()) enterLibrary(); else showLogin();
+  }
+})();
+
+})();
+</script>
+</body>
+</html>
