@@ -278,14 +278,15 @@ dialog p{margin:0 0 20px;color:var(--muted)}
 
       <div id="codeStep" hidden>
         <div class="card-row"><span class="lbl">Sent to</span><span class="hand sm" id="sentTo"></span></div>
-        <div class="card-row"><label for="code">Code</label><input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></div>
+        <div class="card-row" id="codeRow" hidden><label for="code">Code</label><input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></div>
       </div>
 
       <p class="hint" id="loginHint"></p>
       <p class="err" id="loginErr" role="alert"></p>
       <div class="card-actions">
         <button class="stamp-btn" id="primaryBtn" type="button">Check in</button>
-        <button class="linkish" id="resendBtn" type="button" hidden>Send a new code</button>
+        <button class="linkish" id="resendBtn" type="button" hidden>Send a new link</button>
+        <button class="linkish" id="haveCodeBtn" type="button" hidden>I have a code instead</button>
         <button class="linkish" id="changeEmailBtn" type="button" hidden>Use a different email</button>
       </div>
       <div class="stamp" id="stamp" aria-hidden="true">Admitted</div>
@@ -402,8 +403,9 @@ const CONFIG = {
   supabaseUrl: 'https://lavyzpgczqxyuidzommr.supabase.co',
   supabaseKey: 'sb_publishable_AVoSlqiplEjydl8Dbxl4mw_M7C-QRxi',
 
-  // Optional: only send sign-in codes to this email. Leave '' to skip the check.
-  ownerEmail: ''
+  // Only this email may sign in. The page refuses any other address before
+  // asking Supabase, and Supabase refuses it too (new signups are turned off).
+  ownerEmail: 'titikshababu@gmail.com'
 };
 /* ============================================================= */
 
@@ -613,6 +615,7 @@ async function deleteBook(b){
 
 /* ---------- Sign in ---------- */
 let mode = 'email';        // 'email' | 'code'
+let codeFallback = false;  // true once the reader asks to type a code instead
 let pendingEmail = '';
 let entered = false;
 
@@ -629,19 +632,29 @@ function setLoginStep(step){
   $('#emailStep').hidden = step !== 'email';
   $('#codeStep').hidden = step !== 'code';
   $('#resendBtn').hidden = step !== 'code';
+  $('#haveCodeBtn').hidden = true;
+  if (step !== 'code') $('#codeRow').hidden = true;
   $('#changeEmailBtn').hidden = step !== 'code';
   const btn = $('#primaryBtn');
   if (sb) {
     $('#email2Row').hidden = true;
     if (step === 'email') {
-      btn.textContent = 'Send my code';
-      $('#loginHint').textContent = 'Write your email and we’ll send you a sign-in code. No password needed.';
+      codeFallback = false;
+      btn.hidden = false;
+      btn.textContent = 'Send my sign-in link';
+      $('#loginHint').textContent = 'Write your email and we’ll send you a sign-in link. No password needed.';
     } else {
-      btn.textContent = 'Check in';
       $('#sentTo').textContent = pendingEmail;
-      $('#loginHint').textContent = 'Check your inbox for the code. You can also tap the link in that email on this device.';
+      $('#codeRow').hidden = !codeFallback;
+      $('#haveCodeBtn').hidden = codeFallback;
+      btn.hidden = !codeFallback;
+      btn.textContent = 'Check in';
+      $('#loginHint').textContent = codeFallback
+        ? 'Type the code from your email, then check in.'
+        : 'Open the email we just sent and tap Sign in. Open it in this browser, on this device — the link only works where you asked for it.';
     }
   } else {
+    btn.hidden = false;
     const first = !CONFIG.ownerEmail && !store.get('tb-owner', null);
     $('#email2Row').hidden = !first;
     btn.textContent = 'Check in';
@@ -649,7 +662,10 @@ function setLoginStep(step){
       ? 'First visit: the email you write here becomes the key to this library. Write it twice so a typo can’t lock you out.'
       : 'Welcome back. Write the email this library knows you by.';
   }
-  setTimeout(() => (step === 'code' ? $('#code') : $('#email')).focus(), 50);
+  setTimeout(() => {
+    if (step !== 'code') { $('#email').focus(); return; }
+    if (codeFallback) $('#code').focus();
+  }, 50);
 }
 
 function showLogin(){
@@ -690,7 +706,7 @@ async function onPrimary(){
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Enter a full email address, like name@example.com.'; return; }
     if (CONFIG.ownerEmail && email !== norm(CONFIG.ownerEmail)) { err.textContent = 'That email isn’t on this library’s card. Check for typos and try again.'; return; }
     busy(true, 'Sending…');
-    try { await sendCode(email); pendingEmail = email; mode = 'code'; busy(false); toast('Code sent. Check your inbox.'); }
+    try { await sendCode(email); pendingEmail = email; mode = 'code'; busy(false); toast('Sign-in link sent. Check your inbox.'); }
     catch (e) { busy(false); $('#loginErr').textContent = e.message; }
     return;
   }
@@ -734,9 +750,10 @@ async function onPrimary(){
 $('#primaryBtn').addEventListener('click', onPrimary);
 ['#email', '#email2', '#code'].forEach(s => $(s).addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); onPrimary(); } }));
 $('#changeEmailBtn').addEventListener('click', () => { pendingEmail = ''; $('#code').value = ''; setLoginStep('email'); });
+$('#haveCodeBtn').addEventListener('click', () => { codeFallback = true; setLoginStep('code'); });
 $('#resendBtn').addEventListener('click', async () => {
   $('#loginErr').textContent = '';
-  try { await sendCode(pendingEmail); toast('A new code is on its way.'); }
+  try { await sendCode(pendingEmail); toast('A new link is on its way.'); }
   catch (e) { $('#loginErr').textContent = e.message; }
 });
 
